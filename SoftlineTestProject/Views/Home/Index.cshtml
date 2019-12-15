@@ -1,0 +1,93 @@
+﻿@Scripts.Render("~/scripts/jquery-3.4.1.min.js")
+@Scripts.Render("~/scripts/jquery.unobtrusive-ajax.min.js")
+@Scripts.Render("~/scripts/bootstrap.min.js")
+@Scripts.Render("~/scripts/spa.js")
+
+@{
+    ViewBag.Title = "SPA Test";
+    Layout = null;
+    string path = Server.MapPath("~/Files/");
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>SPA Test</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/-->
+    <link href="~/Content/Site.css" rel="stylesheet">
+</head>
+<body>
+    <!-- HTML-код модального окна -->
+    <div class="modal" tabindex="-1" role="dialog" id="myModalBox">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" id="DirectoryListing">
+            </div>
+        </div>
+    </div>
+
+
+    <div class="leftpanel">
+        <table class="table table-borderless">
+            <tr>
+                <td class="custom-td-label">Имя базы данных </td>
+                <td class="custom-td-body">
+                    <input type="text" class="form-control  form-control-sm" value="" id="FileNameWithoutExt" oninput="$('#FileName').val(this.value + '.txt')">
+                    <input type="hidden" id="FileName">
+                </td>
+            </tr>
+            <tr>
+                <td class="custom-td-label">Путь к файлу</td>
+                <td class="custom-td-body">
+                    <div>
+                        @using (Ajax.BeginForm("DirectoryListing", new AjaxOptions { UpdateTargetId = "DirectoryListing", OnSuccess = "$('#myModalBox').modal('show');" }))
+                        {
+                            <input type="text" id="DirectoryName" class="form-control  form-control-sm " name="DirectoryName" value="@path" />
+                            <input type="submit" class="btn btn-primary btn-sm" value="..." />
+                        }
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="FirstLineIsHeader" checked>
+                        <label for="FirstLineIsHeader" class="custom-control-label">Первая строка содержит заголовки</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="custom-td-label">Разделитель ячеек</td>
+                <td class="custom-td-body">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" name="FileSeparator" id="FileSeparator1" value="Tab" checked>
+                        <label class="custom-control-label" for="FileSeparator1">Знак табуляции</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" name="FileSeparator" id="FileSeparator2" value="Space">
+                        <label class="custom-control-label" for="FileSeparator2">Пробел</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" name="FileSeparator" id="FileSeparator3" value="Semicolon">
+                        <label class="custom-control-label" for="FileSeparator3">Точка с запятой</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" name="FileSeparator" id="FileSeparator4" value="Custom">
+                        <label class="custom-control-label" for="FileSeparator4">Другой</label>
+                        <input type="text" class="form-control  form-control-sm separator-textbox" name="FileSeparatorText" id="FileSeparatorText" oninput="$('#FileSeparator4').prop('checked', true);">
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+    <div class="rightpanel" id="ParseFile">
+    </div>
+</body>
+</html>
+
