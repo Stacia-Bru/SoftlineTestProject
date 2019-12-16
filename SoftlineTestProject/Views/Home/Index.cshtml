@@ -85,8 +85,48 @@
         </table>
     </div>
 
-
     <div class="rightpanel" id="ParseFile">
+        <script>
+            initSizeofTable();
+        </script>
+        <div>
+            <p>Наименования столбцов</p>
+            <table id="HeaderList" name="HeaderList">
+                @for (int i = 1; i <= 3; i++)
+                {
+                    string label = "Столбец" + i.ToString();
+                    string TargetName = "TableHeader" + i.ToString();
+                    string SourceName = "ListHeader" + i.ToString();
+                    <tr><td><input type="text" class="form-control  form-control-sm" value="@label" id="@SourceName" name="HeaderCell" oninput="SetHeaderValue('@SourceName', '@TargetName');"></td></tr>
+                }
+
+            </table>
+        </div>
+        <hr />
+        <div>
+            <p>Содержимое базы</p>
+            <table class="table table-bordered table-striped" id="RecordList" name="RecordList">
+                <tr class="table-info">
+                    @for (int i = 1; i <= 3; i++)
+                    {
+                        string TargetName = "TableHeader" + i.ToString();
+                        string SourceName = "ListHeader" + i.ToString();
+                        <th>
+                            <label class="custom-table-header" id="@TargetName">
+                                <script>SetHeaderValue('@SourceName', '@TargetName');</script>
+                            </label>
+                        </th>
+                    }
+                </tr>
+                <tr>
+                    <td><input type="text" class="form-control  form-control-tablecell" name="RecordCell1" value=""></td>
+                    <td><input type="text" class="form-control  form-control-tablecell" name="RecordCell1" value=""></td>
+                    <td><input type="text" class="form-control  form-control-tablecell" name="RecordCell1" value=""></td>
+                </tr>
+            </table>
+            <button type="button" class="btn btn-outline-primary" onclick="AddRecord();">+</button>
+            <button type="button" class="btn btn-primary" onclick="Save();">Сохранить</button><div id="SaveFileWarning">&nbsp;</div>
+        </div>
     </div>
 </body>
 </html>

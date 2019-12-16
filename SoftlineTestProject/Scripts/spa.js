@@ -1,5 +1,5 @@
-let NumberOfFileRecords = 0;    //Число записей в файле
-let NumberOfCells = 0;          //Число столбцов
+window.NumberOfFileRecords = 2;    //Число записей в файле по умолчанию
+window.NumberOfCells = 3;          //Число столбцов по умолчанию
 
 function CutExtention(filename) {
     return filename.substr(0, $("#DirectoryDialogOptionName").val().lastIndexOf("."));
@@ -38,7 +38,10 @@ function getSeparator() {
     }
 }
 
-
+function initSizeofTable() {
+    window.NumberOfFileRecords = 2;  //сброс значений на умолчание
+    window.NumberOfCells = 3;
+}
 
 function setCurrent(filename, directory, isDirectory, self) {
     //фиксируем подсветку, чтобы видеть, что мы выбрали
@@ -106,6 +109,7 @@ function SetHeaderValue(souce, target) {
 }
 
 function AddRecord() {
+    console.log("Текущее число записей в файле" + window.NumberOfFileRecords);
     var tableRef = document.getElementById('RecordList');
     var newRow = tableRef.insertRow(window.NumberOfFileRecords);
     for (let i = 0; i < window.NumberOfCells; i++) {
@@ -117,6 +121,7 @@ function AddRecord() {
         newCell.appendChild(newInput);
     }
     window.NumberOfFileRecords++;
+    console.log("Новое число записей в файле" + window.NumberOfFileRecords);
 }
 
 function readRecordFromForm(id, cellTag, isHeader)

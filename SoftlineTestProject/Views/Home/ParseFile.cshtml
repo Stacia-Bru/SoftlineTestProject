@@ -1,4 +1,7 @@
 ﻿@model SoftlineTestProject.Models.DataFile
+<script>
+    initSizeofTable();
+</script>
 @{
     int maxCells = 0;
 
@@ -13,10 +16,10 @@
 
 
 
-<script>
-window.NumberOfFileRecords = @Model.ListOfRecords.Count;  //сообщаем скриптам в браузере число строк и столбцов
-window.NumberOfCells = @maxCells;
-</script>
+        <script>
+    window.NumberOfFileRecords = @Model.ListOfRecords.Count;  //сообщаем скриптам в браузере число строк и столбцов
+    window.NumberOfCells = @maxCells;
+        </script>
     }
 }
 
@@ -31,8 +34,8 @@ window.NumberOfCells = @maxCells;
                 for (int i = 1; i <= maxCells; i++)
                 {
                     string cell = "";
-                    if (i <= record.CellData.Count) { cell = record.CellData.ElementAt(i-1);}
-                    else { cell = "Столбец" + i.ToString();}
+                    if (i <= record.CellData.Count) { cell = record.CellData.ElementAt(i - 1); }
+                    else { cell = "Столбец" + i.ToString(); }
                     string TargetName = "TableHeader" + i.ToString();
                     string SourceName = "ListHeader" + i.ToString();
                     <tr><td><input type="text" class="form-control  form-control-sm" name="HeaderCell" value="@cell" id="@SourceName" oninput="SetHeaderValue('@SourceName', '@TargetName');"></td></tr>
@@ -70,43 +73,44 @@ window.NumberOfCells = @maxCells;
             {
                 string TargetName = "TableHeader" + i.ToString();
                 string SourceName = "ListHeader" + i.ToString();
-                <th><label class="custom-table-header" id="@TargetName"><script>SetHeaderValue('@SourceName', '@TargetName');</script></label></th>
+                <th><label class="custom-table-header" id="@TargetName">
+                <script>SetHeaderValue('@SourceName', '@TargetName');</script></label></th>
             }
         </tr>
-            @if (maxCells > 0)
+        @if (maxCells > 0)
+        {
+            string recordName = "";
+            int recordId = 0;
+            foreach (var record in Model.ListOfRecords)
             {
-                string recordName = "";
-                int recordId = 0;
-                foreach (var record in Model.ListOfRecords)
+                if (!record.isHeader)
                 {
-                    if (!record.isHeader)
-                    {
-                        recordId++;
-                        recordName = "RecordCell" + recordId;
-                        <tr>
-                            @for (int i=0; i < maxCells; i++)
+                    recordId++;
+                    recordName = "RecordCell" + recordId;
+                    <tr>
+                        @for (int i = 0; i < maxCells; i++)
+                        {
+                            string cell = "";
+                            if (i < record.CellData.Count)
                             {
-                                string cell = "";
-                                if (i < record.CellData.Count)
-                                {
-                                    cell = record.CellData.ElementAt(i);
-                                }
-                                <td><input type="text" class="form-control  form-control-tablecell" name="@recordName" value="@cell"></td>
+                                cell = record.CellData.ElementAt(i);
                             }
+                            <td><input type="text" class="form-control  form-control-tablecell" name="@recordName" value="@cell"></td>
+                        }
 
-                        </tr>
-                    }
+                    </tr>
                 }
             }
-            else
-            {
-                <tr>
-                    <td><input type="text" class="form-control  form-control-tablecell" name="RecordCell1" value=""></td>
-                    <td><input type="text" class="form-control  form-control-tablecell" name="RecordCell1" value=""></td>
-                    <td><input type="text" class="form-control  form-control-tablecell" name="RecordCell1" value=""></td>
-                </tr>
-            }
-        </table>
+        }
+        else
+        {
+            <tr>
+                <td><input type="text" class="form-control  form-control-tablecell" name="RecordCell1" value=""></td>
+                <td><input type="text" class="form-control  form-control-tablecell" name="RecordCell1" value=""></td>
+                <td><input type="text" class="form-control  form-control-tablecell" name="RecordCell1" value=""></td>
+            </tr>
+        }
+    </table>
     <button type="button" class="btn btn-outline-primary" onclick="AddRecord();">+</button>
 
     <button type="button" class="btn btn-primary" onclick="Save();">Сохранить</button><div id="SaveFileWarning">&nbsp;</div>
